@@ -49,12 +49,12 @@ const server = http.createServer((req, res) => {
       if (!title) {
         sendResponse(res, 400, { message: "no title in body request!" });
       } else {
-        projects.push({ id: ++lastindex, title, status: false});
+        projects.push({ id: ++lastindex, title, status: false });
 
         fileHelper.fileWrite(res, projects, sendResponse);
       }
     });
-  }else if (urlparse.pathname === "/todo" && req.method === "PUT") {
+  } else if (urlparse.pathname === "/todo" && req.method === "PUT") {
     req.on("data", (data) => {
       const search = urlparse.search;
 

@@ -7,10 +7,23 @@ const Todo = () => {
   const [title, setTitle] = useState("");
   const [data, setData] = useState([]);
 
+  const getTodos = () => {
+    return axios
+      .get("http://localhost:8000/todo")
+      .then((res) => {
+        console.log(res);
+        setData(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const postTodos = () => {
     return axios
       .post("http://localhost:8000/todo", { title: title })
       .then((res) => {
+        getTodos();
         console.log(res);
       })
       .catch((err) => {
@@ -18,12 +31,24 @@ const Todo = () => {
       });
   };
 
-  const getTodos = () => {
+  const updateTodo = (id, status) => {
     return axios
-      .get("http://localhost:8000/todo")
+      .put(`http://localhost:8000/todo?id=${id}`, { status: !status })
       .then((res) => {
+        getTodos();
         console.log(res);
-        setData(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const deleteTodo = (id) => {
+    return axios
+      .delete(`http://localhost:8000/todo?id=${id}`)
+      .then((res) => {
+        getTodos();
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -47,7 +72,7 @@ const Todo = () => {
       {data.map((item) => {
         return (
           <React.Fragment key={item?.id}>
-            <SingleTodo item={item} />
+            <SingleTodo item={item} deleteTodo={deleteTodo} updateTodo={updateTodo} />
           </React.Fragment>
         );
       })}
